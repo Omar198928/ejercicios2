@@ -5,17 +5,24 @@ from flask_cors import CORS
 import json
 from waitress import serve
 
+from Controladores.ControladorEstudiante import ControladorEstudiante
+
 app = Flask(__name__)
 cors = CORS(app)
 
+controladorEstudiante = ControladorEstudiante()
 
-@app.route("/omar/<string:variable1>", methods=['GET'])
-def omarPrueba(variable1):
-    mensajeJson = {}
-    mensajeJson["id_del_grupo"] = 25
-    mensajeJson["idVariable"] = variable1
-    return jsonify(mensajeJson)
 
+@app.route("/estudiante", methods=['POST'])
+
+def crearEstudiante():
+    requestBody = request.get_json()
+    print("body request", requestBody)
+    result = controladorEstudiante.createEstudiante()
+    if result:
+        return {"result": "El estudiante se creo correctamente"}
+    else:
+        return {"result": "ERROR el estudiante NO se creó"}
 
 def loadFileConfig():
     with open('config.json') as f:
